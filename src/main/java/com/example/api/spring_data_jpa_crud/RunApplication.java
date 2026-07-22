@@ -1,4 +1,4 @@
-package com.example.api.student_database_connection_demo;
+package com.example.api.spring_data_jpa_crud;
 
 import java.util.List;
 import java.util.Optional;
