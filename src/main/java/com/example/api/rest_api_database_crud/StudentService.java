@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+// This is a Spring-managed bean class whose role is to conatin business logic.
 @Service
 public class StudentService {
 
@@ -13,13 +14,12 @@ public class StudentService {
     private final StudentRepository studentRepository;
 
     public StudentService(StudentRepository studentRepository) {
-
         this.studentRepository = studentRepository;
     }
 
     // 1. INSERT
 
-    private Student createStudent(Student s) {
+    public Student createStudent(Student s) {
         Student student = studentRepository.save(s);
         return student;
     }
@@ -27,13 +27,13 @@ public class StudentService {
     // 2. READ
 
     // a. Read all
-    private List<Student> getStudents() {
+    public List<Student> getStudents() {
         List<Student> student = studentRepository.findAll();
         return student;
     }
 
     // b. Read by specific Id
-    private Student getStudentById(int id) {
+    public Student getStudentById(Integer id) {
         Optional<Student> optional = studentRepository.findById(id);
 
         if (optional.isPresent()) {
@@ -44,21 +44,21 @@ public class StudentService {
     }
 
     // c. Read by specific Name
-    private List<Student> getStudentsByName(String name) {
+    public List<Student> getStudentsByName(String name) {
         List<Student> student = studentRepository.findByName(name);
         return student;
     }
 
     // 3. UPDATE
 
-    private Student updateStudent(int id, String name, int age) {
+    public Student updateStudent(Integer id, String name, int age) {
         Optional<Student> optional = studentRepository.findById(id);
 
         if (optional.isPresent()) {
             Student student = optional.get();
             student.setName(name);
             student.setAge(age);
-            student = studentRepository.save(student);
+            studentRepository.save(student);
             return student;
         } else {
             return null;
@@ -67,7 +67,7 @@ public class StudentService {
 
     // 4. DELETE
 
-    private boolean deleteStudent(int id) {
+    public boolean deleteStudent(Integer id) {
         if (studentRepository.existsById(id)) {
             studentRepository.deleteById(id);
             return true;
