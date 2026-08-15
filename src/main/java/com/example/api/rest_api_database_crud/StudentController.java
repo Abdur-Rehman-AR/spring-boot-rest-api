@@ -28,7 +28,7 @@ public class StudentController {
     }
 
     // b. Get student by id
-    @GetMapping("/student/{id}")
+    @GetMapping("/students/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Integer id) {
         Student student = studentService.getStudentById(id);
         if (student != null) {
@@ -54,7 +54,7 @@ public class StudentController {
 
     // 2. POST method to create student
 
-    @PostMapping("/student")
+    @PostMapping("/students")
     // @RequestBody tells Spring to take the data from the HTTP request body and
     // convert it into a Java object.
     public ResponseEntity<Student> createStudent(@RequestBody Student s) {
@@ -64,7 +64,7 @@ public class StudentController {
 
     // 3. PUT method to update the Student's all field
 
-    @PutMapping("/student/update/{id}")
+    @PutMapping("/students/{id}")
     public ResponseEntity<?> fullUpdateStudent(@PathVariable Integer id, @RequestBody Student s) {
 
         // Checking either student exists or not
@@ -81,7 +81,7 @@ public class StudentController {
 
     // 4. PATCH method for partial update
 
-    @PatchMapping("/student/{id}")
+    @PatchMapping("/students/{id}")
     public ResponseEntity<?> patchUpdateStudent(@PathVariable Integer id, @RequestBody Student s) {
         // Checking either student exists or not
         Student student = studentService.getStudentById(id);
@@ -99,15 +99,15 @@ public class StudentController {
 
     // 5. DELETE student
 
-    @DeleteMapping("/student/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Integer id) {
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable Integer id) {
         // Checking either student exists or not
         Student student = studentService.getStudentById(id);
         if (student == null) {
             return ResponseEntity.status(404).body("Student not found with this id");
         } else {
             studentService.deleteStudent(id);
-            return ResponseEntity.status(200).body("Student Deleted.");
+            return ResponseEntity.noContent().build();
         }
     }
 }
