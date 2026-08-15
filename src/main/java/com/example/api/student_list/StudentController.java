@@ -11,17 +11,17 @@ public class StudentController {
 
     // using DI to inject student class object in current class
 
-    private StudentService student;
+    private StudentService studentService;
 
-    public StudentController(StudentService student) {
-        this.student = student;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     // 1. GET Method to retrieve all Students
 
     @GetMapping("/students")
     public ResponseEntity<ArrayList<Student>> studentList() {
-        return ResponseEntity.status(200).body(student.getAllStudents());
+        return ResponseEntity.status(200).body(studentService.getAllStudents());
     }
 
     // 2. GET Method to retrieve Student with a specific ID
@@ -30,7 +30,7 @@ public class StudentController {
     @GetMapping("/students/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Integer id) {
 
-        Student std = student.getStudentById(id);
+        Student std = studentService.getStudentById(id);
 
         // build() method will return an empty ResponseEntity object with a 404
         // Not Found status code and no body data.
@@ -45,7 +45,7 @@ public class StudentController {
 
     @GetMapping("/students/search")
     public ResponseEntity<?> getStudentsByName(@RequestParam String name) {
-        ArrayList<Student> list = student.getStudentByName(name);
+        ArrayList<Student> list = studentService.getStudentByName(name);
         if (list.isEmpty()) {
             return ResponseEntity.status(404).body("Students with name " + name + " not present in the list.");
         } else {
@@ -59,7 +59,7 @@ public class StudentController {
     // @RequestBody will take the JSON from the request body and convert it into a
     // java object.
     public ResponseEntity<Student> createStudent(@RequestBody Student newStudent) {
-        ArrayList<Student> list = student.getAllStudents();
+        ArrayList<Student> list = studentService.getAllStudents();
         list.add(newStudent);
         return ResponseEntity.status(201).body(newStudent);
     }
@@ -70,7 +70,7 @@ public class StudentController {
     public ResponseEntity<Student> updateStudent(@PathVariable Integer id, @RequestBody Student updateStudent) {
         // first we will check either student exists or not
 
-        Student std = student.getStudentById(id);
+        Student std = studentService.getStudentById(id);
 
         if (std == null) {
             return ResponseEntity.status(404).build();
@@ -87,7 +87,7 @@ public class StudentController {
     public ResponseEntity<Student> patchStudent(@PathVariable Integer id, @RequestBody Student newStudent) {
         // first we will check either student exists or not
 
-        Student std = student.getStudentById(id);
+        Student std = studentService.getStudentById(id);
 
         if (std == null) {
             return ResponseEntity.status(404).build();
@@ -106,12 +106,12 @@ public class StudentController {
 
     @DeleteMapping("/students/{id}")
     public ResponseEntity<String> deleteStudent(@PathVariable Integer id) {
-        Student std = student.getStudentById(id);
+        Student std = studentService.getStudentById(id);
 
         if (std == null) {
             return ResponseEntity.status(404).body("Student could not be deleted because it does not exist.");
         } else {
-            boolean result = student.deleteStudent(std);
+            boolean result = studentService.deleteStudent(std);
             if (result)
                 return ResponseEntity.status(200).body("Student got deleted.");
             else
