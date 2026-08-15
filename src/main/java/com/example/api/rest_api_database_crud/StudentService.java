@@ -19,7 +19,7 @@ public class StudentService {
 
     // 1. INSERT
 
-    public Student createStudent(Student s) {
+    public Student saveStudent(Student s) {
         Student student = studentRepository.save(s);
         return student;
     }
