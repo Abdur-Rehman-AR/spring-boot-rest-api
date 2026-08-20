@@ -16,6 +16,11 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @GetMapping("/test-error")
+    public String testError() {
+        throw new RuntimeException("Testing 500 error");
+    }
+
     // 1. GET Method to Read Students
 
     // a. Get all students
