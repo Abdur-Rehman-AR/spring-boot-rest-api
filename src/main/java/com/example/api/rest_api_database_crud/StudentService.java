@@ -39,7 +39,8 @@ public class StudentService {
         if (optional.isPresent()) {
             return optional.get();
         } else {
-            return null;
+            // Create an exception object and immediately throw it.
+            throw new ResourceNotFoundException("Student not found with ID: " +id);
         }
     }
 
