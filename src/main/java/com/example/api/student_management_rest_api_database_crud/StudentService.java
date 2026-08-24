@@ -30,20 +30,32 @@ public class StudentService {
 
     // a. Get Students from the Page
     // Page interface is return type as a output while Pageable is interface used
-    // for input
+    // for input + filters are applied as well
 
-    public Page<Student> getStudents(Pageable pageable) {
-        return studentRepository.findAll(pageable);
+    public Page<Student> getStudents(Pageable pageable, String name, Integer age) {
+        if (name != null && age != null) {
+            return studentRepository.findByNameAndAge(name, age, pageable);
+        } else if (name != null && age == null) {
+            return studentRepository.findByName(name, pageable);
+        } else if (name == null && age != null) {
+            return studentRepository.findByAge(age, pageable);
+        } else {
+            return studentRepository.findAll(pageable);
+        }
     }
 
     // b. Read all
     public List<Student> getStudents(String name, Integer age) {
 
-        if(name == null && age == null)
-        {
+        if (name != null && age != null) {
+            return studentRepository.findByNameAndAge(name, age);
+        } else if (name != null && age == null) {
+            return studentRepository.findByName(name);
+        } else if (name == null && age != null) {
+            return studentRepository.findByAge(age);
+        } else {
             return studentRepository.findAll();
         }
-        else if(name == null)
     }
 
     // c. Read by specific Id
