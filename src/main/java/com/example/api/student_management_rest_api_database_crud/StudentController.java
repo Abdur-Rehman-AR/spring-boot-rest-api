@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import jakarta.validation.Valid;
 
@@ -41,6 +44,16 @@ public class StudentController {
     public ResponseEntity<Student> getStudentById(@PathVariable Integer id) {
         Student student = studentService.getStudentById(id);
         return ResponseEntity.ok(student);
+    }
+
+    // c. Getting students from the page
+    @GetMapping("/api/v1/students/page")
+    public ResponseEntity<Page<Student>> getStudents(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        // PageRequest.of() creates the pagination instructions and creates the object
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(studentService.getStudents(pageable));
     }
 
     // 2. POST method to create student
