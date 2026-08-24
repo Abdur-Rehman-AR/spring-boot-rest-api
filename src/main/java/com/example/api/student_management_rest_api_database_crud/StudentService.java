@@ -3,6 +3,8 @@ package com.example.api.student_management_rest_api_database_crud;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 // This is a Spring-managed bean class whose role is to conatin business logic.
@@ -26,13 +28,21 @@ public class StudentService {
 
     // 2. READ
 
-    // a. Read all
+    // a. Get Students from the Page
+    // Page interface is return type as a output while Pageable is interface used
+    // for input
+
+    public Page<Student> getStudents(Pageable pageable) {
+        return studentRepository.findAll(pageable);
+    }
+
+    // b. Read all
     public List<Student> getStudents() {
         List<Student> student = studentRepository.findAll();
         return student;
     }
 
-    // b. Read by specific Id
+    // c. Read by specific Id
     public Student getStudentById(Integer id) {
         Optional<Student> optional = studentRepository.findById(id);
 
@@ -44,13 +54,13 @@ public class StudentService {
         }
     }
 
-    // c. Read by specific Name
+    // d. Read by specific Name
     public List<Student> getStudentsByName(String name) {
         List<Student> student = studentRepository.findByName(name);
         return student;
     }
 
-    // 4. DELETE
+    // 3. DELETE
 
     public void deleteStudent(Integer id) {
         studentRepository.deleteById(id);
