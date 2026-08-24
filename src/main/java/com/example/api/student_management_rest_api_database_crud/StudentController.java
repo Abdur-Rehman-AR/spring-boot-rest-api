@@ -25,19 +25,15 @@ public class StudentController {
 
     // 1. GET Method to Read Students
 
-    // a. Get all students or only get student by name
+    // a. Get all students or only get students by specific fields conditions
     @GetMapping("/api/v1/students")
 
     // ResponseEntity is a Spring class that lets your Controller control the
     // response body, HTTP status code and headers sent back to the client.
     // Here, request parameter is not neccessary.
-    public ResponseEntity<List<Student>> getStudents(@RequestParam(required = false) String name) {
-
-        if (name != null) {
-            return ResponseEntity.ok(studentService.getStudentsByName(name));
-        } else {
-            return ResponseEntity.ok(studentService.getStudents());
-        }
+    public ResponseEntity<List<Student>> getStudents(@RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer age) {
+        return ResponseEntity.ok(studentService.getStudents(name, age));
     }
 
     // b. Get student by id

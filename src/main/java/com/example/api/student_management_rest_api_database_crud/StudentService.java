@@ -37,9 +37,13 @@ public class StudentService {
     }
 
     // b. Read all
-    public List<Student> getStudents() {
-        List<Student> student = studentRepository.findAll();
-        return student;
+    public List<Student> getStudents(String name, Integer age) {
+
+        if(name == null && age == null)
+        {
+            return studentRepository.findAll();
+        }
+        else if(name == null)
     }
 
     // c. Read by specific Id
