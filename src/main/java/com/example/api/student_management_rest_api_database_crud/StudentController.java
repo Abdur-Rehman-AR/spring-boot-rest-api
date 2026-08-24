@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import jakarta.validation.Valid;
 
@@ -49,10 +50,25 @@ public class StudentController {
     // c. Getting students from the page
     @GetMapping("/api/v1/students/page")
     public ResponseEntity<Page<Student>> getStudents(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String sort) {
+
+        // Creating the instruction for sorting
+
+        // creating a sort object and pass it to service class method
+        // Sort.unsorted() means that don't apply any sorting.
+        Sort sorting = Sort.unsorted();
+
+        if (sort != null) {
+            String[] parts = sort.split(",");
+            if (parts.length == 2 && parts[1].equalsIgnoreCase("desc")) {
+                sorting = Sort.by(parts[0]).descending();
+            } else {
+                sorting = Sort.by(parts[0]).ascending();
+            }
+        }
 
         // PageRequest.of() creates the pagination instructions and creates the object
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, sorting);
         return ResponseEntity.ok(studentService.getStudents(pageable));
     }
 
