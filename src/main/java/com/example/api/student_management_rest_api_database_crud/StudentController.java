@@ -45,8 +45,12 @@ public class StudentController {
 
     // c. Getting students from the page
     @GetMapping("/api/v1/students/page")
-    public ResponseEntity<Page<Student>> getStudents(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String sort) {
+    public ResponseEntity<Page<Student>> getStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer age) {
 
         // Creating the instruction for sorting
 
@@ -65,7 +69,7 @@ public class StudentController {
 
         // PageRequest.of() creates the pagination instructions and creates the object
         Pageable pageable = PageRequest.of(page, size, sorting);
-        return ResponseEntity.ok(studentService.getStudents(pageable));
+        return ResponseEntity.ok(studentService.getStudents(pageable, name, age));
     }
 
     // 2. POST method to create student
