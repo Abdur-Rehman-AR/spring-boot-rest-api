@@ -9,16 +9,44 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 // This is a Spring-managed bean class whose role is to conatin business logic.
 @Service
 public class StudentService {
 
     // using DI, so we can call DB operation from here
-
     private final StudentRepository studentRepository;
 
-    public StudentService(StudentRepository studentRepository) {
+    // Also using JdbcTemplate class here through DI
+    private final JdbcTemplate jdbcTemplate;
+
+    // using the constructor DI to inject values
+    public StudentService(StudentRepository studentRepository, JdbcTemplate jdbcTemplate) {
         this.studentRepository = studentRepository;
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    // Testing the JdbcTemplate by using a simple sql command
+    public List<Student> getStudents() {
+        String sql = "Select * From student_list";
+
+        // We use JdbcTemplate object to communicate with the database.
+        // query() method runs a SELECT query and process the rows returned by the
+        // database. (row, i) means that for every row that comes back from the
+        // database, execute the code after ->.
+        return jdbcTemplate.query(sql, (row, i) -> {
+            Student student = new Student();
+
+            // getString() is a method of ResultSet. It means get the value from a
+            // database column and return it as a Java String.
+            student.setAge(row.getInt("age"));
+            student.setName(row.getString("name"));
+
+            // Each row is converted into a Student object and returned to JdbcTemplate.
+            // JdbcTemplate collects all Student objects into a List<Student>.
+            return student;
+        });
     }
 
     // Creating a logging object and initializing it
