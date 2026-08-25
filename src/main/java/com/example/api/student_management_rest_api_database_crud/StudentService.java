@@ -27,28 +27,6 @@ public class StudentService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // Testing the JdbcTemplate by using a simple sql command
-    public List<Student> getStudents() {
-        String sql = "Select * From student_list";
-
-        // We use JdbcTemplate object to communicate with the database.
-        // query() method runs a SELECT query and process the rows returned by the
-        // database. (row, i) means that for every row that comes back from the
-        // database, execute the code after ->.
-        return jdbcTemplate.query(sql, (row, i) -> {
-            Student student = new Student();
-
-            // getString() is a method of ResultSet. It means get the value from a
-            // database column and return it as a Java String.
-            student.setAge(row.getInt("age"));
-            student.setName(row.getString("name"));
-
-            // Each row is converted into a Student object and returned to JdbcTemplate.
-            // JdbcTemplate collects all Student objects into a List<Student>.
-            return student;
-        });
-    }
-
     // Creating a logging object and initializing it
 
     // Declared 'final' bcz we dont want that another logger object reassigned to it
@@ -146,5 +124,55 @@ public class StudentService {
     public void deleteStudent(Integer id) {
         studentRepository.deleteById(id);
         logger.info("Student deleted with id {}", id);
+    }
+
+    // 1. Selecting/Reading the data from the JdbcTemplate
+    public List<Student> readStudents() {
+
+        // preparing the statement
+        String sql = "Select * From student_list";
+
+        // We use JdbcTemplate object to communicate with the database.
+        // query() method runs a SELECT query and process the rows returned by the
+        // database. (row, i) means that for every row that comes back from the
+        // database, execute the code after ->.
+        return jdbcTemplate.query(sql, (row, i) -> {
+            Student student = new Student();
+
+            // getString() is a method of ResultSet. It means get the value from a
+            // database column and return it as a Java String.
+            student.setAge(row.getInt("age"));
+            student.setName(row.getString("name"));
+
+            // Each row is converted into a Student object and returned to JdbcTemplate.
+            // JdbcTemplate collects all Student objects into a List<Student>.
+            return student;
+        });
+    }
+
+    // 2. Inserting the data in database
+    public void insertStudent(String name, Integer age) {
+        String sql = "insert into student_list(name, age) values(?, ?)";
+        jdbcTemplate.update(sql, name, age);
+    }
+
+    // 3. Update the data in database
+    public void updateStudent(int id, String name, Integer age) {
+
+        // if we only want to update age
+        if (name == null && age != null) {
+            String sql = "update student_list set age = ? where id = ?";
+            jdbcTemplate.update(sql, age, id);
+        }
+        // if we only want to update name
+        else if (age == null && name != null) {
+            String sql = "update student_list set name = ? where id = ?";
+            jdbcTemplate.update(sql, name, id);
+        }
+        // if we want to update both name and age
+        else {
+            String sql = "update student_list set name = ?, age = ? where id = ?";
+            jdbcTemplate.update(sql, name, age, id);
+        }
     }
 }
