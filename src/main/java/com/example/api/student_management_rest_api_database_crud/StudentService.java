@@ -175,4 +175,10 @@ public class StudentService {
             jdbcTemplate.update(sql, name, age, id);
         }
     }
+
+    // 4. delete the student in database
+    public void removeStudent(Integer id) {
+        String sql = "Delete from student_list where id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }
