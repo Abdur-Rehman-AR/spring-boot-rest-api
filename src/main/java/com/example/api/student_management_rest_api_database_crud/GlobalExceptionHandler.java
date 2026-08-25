@@ -2,6 +2,8 @@ package com.example.api.student_management_rest_api_database_crud;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,8 +14,12 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 
 // Makes this class a global exception handler for all controllers.
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    // creating a logger object to store the application logs
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // 1.
 
@@ -40,6 +46,8 @@ public class GlobalExceptionHandler {
     // This handler catches exceptions that don't have a more specific handler.
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralRequest(Exception e) {
+        // error() is used when an error occurs in your application.
+        logger.error("Unexpected error happened.", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong on the server.");
     }
 
