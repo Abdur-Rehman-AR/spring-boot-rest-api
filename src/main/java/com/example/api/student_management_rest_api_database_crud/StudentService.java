@@ -34,7 +34,6 @@ public class StudentService {
     // application is doing during normal execution.
     // warn() is used when something unusual or potentially problematic happens, but
     // it is not necessarily a system error.
-    //
 
     // 1. INSERT
 
