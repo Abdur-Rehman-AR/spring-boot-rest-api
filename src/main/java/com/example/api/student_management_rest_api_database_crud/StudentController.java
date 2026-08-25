@@ -121,4 +121,16 @@ public class StudentController {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ----------------- JdbcTemplate methods endpoints -----------------
+
+    // 1. Read
+
+    @GetMapping("/api/v2/students")
+    public ResponseEntity<List<Student>> getStudents()
+    {
+        return ResponseEntity.ok(studentService.readStudents());
+    }
+
+    
 }
